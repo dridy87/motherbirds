@@ -23,6 +23,7 @@ export default function Example(props) {
 
 
     const opts = {
+        width: 'fit-content',
         height: '250',
       };
 
