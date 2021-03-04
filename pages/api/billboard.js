@@ -22,7 +22,7 @@ export default function handler(req, res) {
               as: "inventory_docs"
             }
           }
-        ])
+        ]).sort( { "update_dt": 1 } )
 
         .toArray(function (err, result) {
           if (err) throw err;
