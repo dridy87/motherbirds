@@ -3,27 +3,17 @@ import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import { DataScroller } from 'primereact/datascroller';
+import useSWR from 'swr';
 
+const fetcher = (url) => fetch(url).then((res) => res.json())
 // This function gets called at build time
-export async function getStaticProps() {
-  // Call an external API endpoint to get posts
-  const res = await fetch('https://localhost/api/billboard')
-  const posts = await res.json()
 
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: { 
-      posts,
-    },
-  }
-}
 
-export default function Home({ posts }) {
+export default function Home() {
 
   const [player, setPlayer] = useState(null);
 
-
+  const { data, error } = useSWR('/api/billboard', fetcher)
   const opts = {
     height: '300',
 
@@ -69,7 +59,7 @@ export default function Home({ posts }) {
   }
 
 
-  if (!posts) return <div>Loading...</div>
+  if (!data) return <div>Loading...</div>
   return (
     
 
@@ -80,10 +70,10 @@ export default function Home({ posts }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-      <YouTube opts={opts}  videoId={posts[0].videoId} />
+      <YouTube opts={opts}  videoId={data[0].videoId} />
       <div className="datascroller-demo">
           <div className="card">
-          <DataScroller value={posts} itemTemplate={itemTemplate}
+          <DataScroller value={data} itemTemplate={itemTemplate}
             rows={5} inline scrollHeight="470px"  header="List of Products" />
           </div>
          
