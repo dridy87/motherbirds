@@ -3,46 +3,34 @@ import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import { DataScroller } from 'primereact/datascroller';
+import YoutubePlayer from "../components/youtubu";
 import useSWR from 'swr';
 
-const fetcher = (url) => fetch(url).then((res) => res.json())
+const fetcher = (url) => fetch(url).then((res) => {
+  return res.json()
+})
 // This function gets called at build time
 
 
 export default function Home() {
 
-  const [player, setPlayer] = useState(null);
+  const [videoId, setVideoId] = useState();
+  const { data, error } = useSWR('/api/billboard', fetcher, {
+    
+    onSuccess: (data)=>{
+      console.log(videoId);
+      if(videoId == undefined)
+       setVideoId(data[0].videoId)
+    }
+  })
 
-  const { data, error } = useSWR('/api/billboard', fetcher)
-  const opts = {
-    height: '300',
-
-  };
-
-  const onReady = (event) => {
-    // eslint-disable-next-line
-    console.log(`YouTube Player object for videoId: "${props.videoId}" has been saved to state.`);
-    setPlayer(event.target);
-
-
-    player.playVideo();
-  };
-
-  const onPlayVideo = () => {
-    player.playVideo();
-  };
-
-  const onPauseVideo = () => {
-    player.pauseVideo();
-  };
-
-  const onChangeVideo = () => {
-    setVideoId(videoId === videoIdA ? videoIdB : videoIdA);
-  };
 
   const itemTemplate = (data) => {
+
+
     return (
-      <div className="product-item">
+      <div className="product-item"  onClick={() => {
+        setVideoId(data.videoId) }}>
         <img src={`${data.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={data.name} />
         <div className="product-detail">
           <div className="product-name">{data.title}</div>
@@ -70,11 +58,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-      <YouTube opts={opts}  videoId={data[0].videoId} />
+      <YoutubePlayer   videoId={videoId} />
       <div className="datascroller-demo">
           <div className="card">
           <DataScroller value={data} itemTemplate={itemTemplate}
-            rows={5} inline scrollHeight="470px"  header="List of Products" />
+            rows={5} inline scrollHeight="470px"  header="List of Billboard Chart" />
           </div>
          
         </div>
