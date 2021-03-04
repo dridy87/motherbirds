@@ -18,7 +18,6 @@ export default function Home() {
   const { data, error } = useSWR('/api/billboard', fetcher, {
     
     onSuccess: (data)=>{
-      console.log(videoId);
       if(videoId == undefined)
        setVideoId(data[0].videoId)
     }
@@ -29,18 +28,18 @@ export default function Home() {
 
 
     return (
-      <div className="product-item"  onClick={() => {
-        setVideoId(data.videoId) }}>
-        <img src={`${data.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={data.name} />
+      <div className="product-item"  >
+        <img src={`${data.image}`} onError={(e) => e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={data.name} onClick={() => {
+        setVideoId(data.videoId) }} />
         <div className="product-detail">
-          <div className="product-name">{data.title}</div>
+          <div className="product-name">{data.rank}. {data.title}</div>
+          <div className="product-description">{data.artist}</div>
 
         </div>
 
         <div className="product-action">
-          <span className="product-price">{data.artist}</span>
-          {/* <Button icon="pi pi-shopping-cart" label="Add to Cart" disabled={data.rank === 'OUTOFSTOCK'}></Button> */}
-          {/* <span className={`product-badge status-${data.inventoryStatus.toLowerCase()}`}>{data.inventoryStatus}</span> */}
+        
+        
         </div>
       </div>
     );
