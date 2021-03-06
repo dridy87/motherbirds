@@ -13,6 +13,8 @@ export default function Example(props) {
             player.playVideo()
         }
 
+        console.log(props)
+
     });
 
     const onReady = (event) => {
