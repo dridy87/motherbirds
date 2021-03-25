@@ -104,3 +104,12 @@ a {
       width: 100%;
   }
 }
+
+.header{
+  background-color: aquamarine;
+  height: 3rem;
+}
+
+.youtubu{
+  text-align: center;
+}

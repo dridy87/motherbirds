@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from 'react';
 import YouTube from 'react-youtube';
 import { DataScroller } from 'primereact/datascroller';
@@ -12,10 +11,17 @@ const fetcher = (url) => fetch(url).then((res) => {
 })
 // This function gets called at build time
 
+import {
+  useSession, signIn, signOut
+} from 'next-auth/client'
+
+import styles from '../components/header.module.css'
+
 
 
 export default function Home() {
 
+  const [ session, loading ] = useSession();
   const [videoId, setVideoId] = useState();
   const { data, error } = useSWR('/api/billboard', fetcher, {
 
@@ -135,7 +141,43 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
-          <YoutubePlayer videoId={videoId} />
+
+        <div className ="header">
+          {!session && <>
+            <span className={styles.notSignedInText}>You are not signed in</span>
+            <a
+                href={`/api/auth/signin`}
+                className={styles.buttonPrimary}
+                onClick={(e) => {
+                  e.preventDefault()
+                  signIn()
+                }}
+              >
+                Sign in
+              </a>
+          </>}
+          {session && <>
+            {session.user.image && <span style={{backgroundImage: `url(${session.user.image})` }} className={styles.avatar}/>}
+            <span className={styles.signedInText}>
+              <small>Signed in as</small><br/>
+              <strong>{session.user.email || session.user.name}</strong>
+              </span>
+            <a
+                href={`/api/auth/signout`}
+                className={styles.button}
+                onClick={(e) => {
+                  e.preventDefault()
+                  signOut()
+                }}
+              >
+                Sign out
+              </a>
+          </>}
+
+        </div>
+        
+
+          <YoutubePlayer videoId={videoId}   />
           <div className="datascroller-demo">
             <div className="card">
               <DataScroller value={data} itemTemplate={itemTemplate}

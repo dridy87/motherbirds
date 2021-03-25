@@ -31,8 +31,8 @@ export default function Example(props) {
 
 
     return (
-        <div>
-            <YouTube opts={opts} videoId={props.videoId} onReady={onReady} />
+        <div className="youtubu">
+            <YouTube opts={opts} videoId={props.videoId} onReady={onReady}  />
         </div>
     );
 }
