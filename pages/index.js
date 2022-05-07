@@ -7,17 +7,8 @@ import YoutubePlayer from "../components/youtubu";
 import store, { addTimeline } from '../common/store';
 import { Provider } from 'react-redux';
 import Axios from "axios";
-const fetcher = (url) => fetch(url).then((res) => {
-  return res.json()
-})
-// This function gets called at build time
 
-
-import useSWR from 'swr';
 import styles from '../components/header.module.css'
-
-
-
 export default function Home() {
 
  
@@ -26,24 +17,13 @@ export default function Home() {
   const API_URL =
     "/api/billboard";
 
-
   function getData() {
     setData(null);
     Axios.get(API_URL).then((res) => {
-      console.log(res.data.slice(0,5))
       setData(res.data);
       setVideoId(res.data[0].videoId)
     })
   }
-
-  // const { data, error } = useSWR('/api/billboard', fetcher, {
-
-  //   onSuccess: (data) => {
-  //     console.log('data', data)
-  //     if (videoId == undefined)
-  //       setVideoId(data[0].videoId)
-  //   }
-  // })
 
   useEffect(()=>{
     getData();

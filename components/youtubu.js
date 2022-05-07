@@ -5,14 +5,13 @@ import React, { useState, useEffect } from 'react';
 export default function Example(props) {
     // const [videoId, setVideoId] = useState(props.videoId);
     const [player, setPlayer] = useState(null);
-    const [isReady, setReady] = useState(false);
+    // const [isReady, setReady] = useState(false);
 
     useEffect(() => {
-
-        if(player != null){
+        
+        if(player != null && props.videoId != null){
             let index = props.data.findIndex(t => t.videoId == props.videoId);
             player.loadPlaylist(props.data.map(t=>t.videoId), index)
-            // player.playVideo()
         }
 
        
@@ -20,12 +19,9 @@ export default function Example(props) {
     });
 
     const onReady = (event) => {
-        if(props.videoId != null){
-            console.log(`YouTube Player object for videoId: "${props.videoId}" has been saved to state.`);
-            setPlayer(event.target);
-            setReady(true);
-        }
-        
+
+        setPlayer(event.target);
+
     };
 
 
